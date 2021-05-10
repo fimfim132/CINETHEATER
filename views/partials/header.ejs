@@ -27,9 +27,16 @@
                 <input type="search" class="form-control form-control-dark" placeholder="Search...">
                 </form>
         
+                <% if(!currentUser) { %>
                 <div class="text-end">
                 <a href="/login" class="btn btn-outline-light me-2">Login</a>
                 <a href="/register" class="btn btn-warning">Sign-up</a>
                 </div>
+                <% } else { %>
+                <div class="text-end">
+                    <a href="#" class="btn btn-outline-light me-2"><%= currentUser.username %></a>
+                    <a href="/logout" class="btn btn-warning">Logout</a>
+                </div>
+                <% } %>
             </div>
     </header>

@@ -1,10 +1,11 @@
-<%- include('../partials/header.ejs') %>
+<%- include('partials/header.ejs') %>
 
-<h1>Login</h1>
+<h1>Register</h1>
 <form action="/register" method="POST">
+    <!-- <input type="email" name="email" placeholder="email"> -->
     <input type="text" name="username" placeholder="username">
     <input type="password" name="password" placeholder="password">
     <button>Register now</button>
 </form>
 
-<%- include('../partials/footer.ejs') %>
+<%- include('partials/footer.ejs') %>

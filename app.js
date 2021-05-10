@@ -5,17 +5,53 @@ const   express         = require('express'),
         passport        = require('passport'),
         LocalStrategy   = require('passport-local'),
         User            = require('./models/user'),
-        Slide           = require('./models/slide'),
+        Available     = require('./models/available'),
         seedDB          = require('./seed'),
         Schema          = mongoose.Schema;
 
+var indexRoutes         = require('./routes/index'),
+    cinemaRoutes        = require('./routes/cinema'),
+    movieRoutes         = require('./routes/movie');
 
 mongoose.connect('mongodb://localhost:27017/project');
-
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
-seedDB();
+app.use(express.static(__dirname + 'public'));
+
+app.use(require('express-session')({
+    secret: 'secret is always secret.',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use(function(req,res,next){
+    res.locals.currentUser = req.user;
+    next();
+});
+
+app.use('/', indexRoutes);
+app.use('/movies', movieRoutes);
+app.use('/cinemas', cinemaRoutes);
+
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    } else {
+        res.redirect('/login');
+    }
+}
+// seedDB();
+app.listen(3000, function(){
+    console.log('server is start');
+});
+
+
 
 // Slide.create(
     //     {
@@ -39,47 +75,3 @@ seedDB();
 //         }
 //     }
 // );
-
-
-app.get('/', function(req, res){
-    Slide.find({}, function(err, allSlide){
-        if(err){
-            console.log(err);
-        } else{
-            res.render('homes/home.ejs', {slide: allSlide});
-        }
-    });
-});
-
-app.post('/', function(req, res){
-    var img = req.body.img;
-    var newSlide = {img: img};
-    Slide.create(newSlide, function(err, newlyCreated){
-        if(err){
-            console.log(err);
-        } else {
-            res.redirect('/');
-        }
-    });
-});
-
-app.get('/movies', function(req, res){
-    res.render('movies/index.ejs');
-});
-
-app.get('/cinemas', function(req, res){
-    res.render('cinemas/index.ejs');
-});
-
-app.get('/register', function(req, res){
-    res.render('register.ejs');
-});
-
-app.get('/login', function(req, res){
-    res.render('login.ejs');
-});
-
-
-app.listen(3000, function(){
-    console.log('server is start');
-});
