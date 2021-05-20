@@ -5,12 +5,12 @@ const   express         = require('express'),
         passport        = require('passport'),
         LocalStrategy   = require('passport-local'),
         User            = require('./models/user'),
-        Available     = require('./models/available'),
         seedDB          = require('./seed'),
         Schema          = mongoose.Schema;
 
 var indexRoutes         = require('./routes/index'),
     cinemaRoutes        = require('./routes/cinema'),
+    adminRoutes        = require('./routes/admin'),
     movieRoutes         = require('./routes/movie');
 
 mongoose.connect('mongodb://localhost:27017/project');
@@ -38,6 +38,7 @@ app.use(function(req,res,next){
 app.use('/', indexRoutes);
 app.use('/movies', movieRoutes);
 app.use('/cinemas', cinemaRoutes);
+app.use('/admin', adminRoutes);
 
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){

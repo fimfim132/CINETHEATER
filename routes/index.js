@@ -2,7 +2,7 @@ var express     = require('express'),
     router      = express.Router(),
     Slide       = require('../models/slide'),
     User        = require('../models/user'),
-    Recommend   = require('../models/recommend'),
+    Available   = require('../models/available'),
     passport    = require('passport');
 
 router.get('/', function(req, res){
@@ -10,40 +10,18 @@ router.get('/', function(req, res){
         if(err){
             console.log(err);
         } else{
-            res.render('homes/home.ejs', {slide: allSlide});
+           Available.find({}, function(err, allAvailable){
+                if(err){
+                    console.log(err);
+                } else{
+                    res.render('homes/home.ejs', {available: allAvailable, slide: allSlide});
+                }
+            }); 
         }
     });
-    // Recommend.find({}, function(err, allRecommend){
-    //     if(err){
-    //         console.log(err);
-    //     } else{
-    //         res.render('homes/home.ejs', {recommend: allRecommend});
-    //     }
-    // });
 });
 
 router.post('/', function(req, res){
-    var img = req.body.img;
-    var newSlide = {img: img};
-    // var imgs = req.body.imgs;
-    // var title = req.body.title;
-    // var year = req.body.year;
-    // var rate = req.body.rate;
-    // var newRecommend = {imgs: imgs, title: title, year: year, rate: rate};
-    Slide.create(newSlide, function(err, newlyCreated){
-        if(err){
-            console.log(err);
-        } else {
-            res.redirect('/');
-        }
-    });
-    // Recommend.create(newRecommend, function(err, newlyCreated){
-    //     if(err){
-    //         console.log(err);
-    //     } else {
-    //         res.redirect('/');
-    //     }
-    // });
 });
 
 router.get('/register', function(req, res){
@@ -72,6 +50,11 @@ router.post('/login', passport.authenticate('local',
         successRedirect: '/',
         failureRedirect: '/login'
     }), function(req, res){
+        if(currentUser.username != ' admin'){
+             res.redirect('/admin');
+        } else {
+            res.redirect('/');
+        }
 });
 
 router.get('/logout', function(req, res){

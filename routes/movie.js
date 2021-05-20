@@ -27,4 +27,15 @@ router.post('/', function(req, res){
     });
 });
 
+router.get('/detail',function(req, res){
+    Available.find({}, function(err, allAvailable){
+        if(err){
+            console.log(err);
+        } else{
+            res.render('movies/detail.ejs', {available: allAvailable});
+        }
+    });
+});
+
+
 module.exports = router;
