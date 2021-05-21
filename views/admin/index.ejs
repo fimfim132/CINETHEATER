@@ -1,39 +1,3 @@
 <%- include('../partials/header.ejs') %>
-<div class="container">
-    <h1 class="mb-3">Add movie</h1>
-    <form action="/admin" method="POST" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label class="form-label">Title name</label>
-            <input type="text" class="form-control" name="title" placeholder="Title name">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Poster</label>
-            <input type="file" class="form-control" name="img" accept="image/*">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Description</label>
-            <input type="text" class="form-control" name="desc" placeholder="Description">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">time</label>
-            <input type="text" class="form-control" name="time" placeholder="Time">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">type</label>
-            <input type="text" class="form-control" name="type" placeholder="Type">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Description</label>
-            <input type="text" class="form-control" name="desc" placeholder="Description">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Date</label>
-            <input type="date" class="form-control" name="date" placeholder="Date">
-        </div>
-        <div class="mb-3">
-            <input type="submit" value="Add movie">
-        </div>
-    </form>
-</div>
 
 <%- include('../partials/footer.ejs') %>

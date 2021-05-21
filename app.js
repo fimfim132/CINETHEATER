@@ -7,7 +7,7 @@ const   express         = require('express'),
         User            = require('./models/user'),
         seedDB          = require('./seed'),
         Schema          = mongoose.Schema;
-
+        
 var indexRoutes         = require('./routes/index'),
     cinemaRoutes        = require('./routes/cinema'),
     adminRoutes        = require('./routes/admin'),

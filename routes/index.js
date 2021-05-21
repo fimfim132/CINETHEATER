@@ -2,19 +2,20 @@ var express     = require('express'),
     router      = express.Router(),
     Slide       = require('../models/slide'),
     User        = require('../models/user'),
-    Available   = require('../models/available'),
+    Movie   = require('../models/movie'),
     passport    = require('passport');
+    
 
 router.get('/', function(req, res){
     Slide.find({}, function(err, allSlide){
         if(err){
             console.log(err);
         } else{
-           Available.find({}, function(err, allAvailable){
+           Movie.find({}, function(err, allMovie){
                 if(err){
                     console.log(err);
                 } else{
-                    res.render('homes/home.ejs', {available: allAvailable, slide: allSlide});
+                    res.render('homes/home.ejs', {movie: allMovie, slide: allSlide});
                 }
             }); 
         }
@@ -50,11 +51,6 @@ router.post('/login', passport.authenticate('local',
         successRedirect: '/',
         failureRedirect: '/login'
     }), function(req, res){
-        if(currentUser.username != ' admin'){
-             res.redirect('/admin');
-        } else {
-            res.redirect('/');
-        }
 });
 
 router.get('/logout', function(req, res){
