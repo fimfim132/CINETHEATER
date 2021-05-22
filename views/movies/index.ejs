@@ -1,86 +1,18 @@
 <%- include('../partials/header.ejs') %>
-<div class='head'>
-	<div class="row justify-content-center">
-		<h1 class="movie_head">Available</h1>
-		<% available.forEach(function(available){ %>
-			<div class="card movie_card col-2">
-		  		<img src="<%= available.img %>" class="card-img-top" alt="...">
-		  		<div class="card-body">
-		    		<h5 class="card-title"><%= available.title %></h5>
-		   			<span class="movie_info"><%= available.year %></span>
-		   			<span class="movie_info float-right"><i class="fas fa-star float-right"><%= available.rate %></i></span>
-		  		</div>
-			</div>
-		<% }); %> 
-	</div>
-</div>		  
 
-<div  class='head'>
-	<div class="row justify-content-center">
-		<h1 class="movie_head">Comming soon</h1>
-				<div class="card movie_card col-2">
-		  <img src="https://www.joblo.com/assets/images/joblo/posters/2019/02/Dyow9RgX4AElAGN.jpg" class="card-img-top" alt="...">
-		  <div class="card-body">
-		    <h5 class="card-title">Toy Story 4</h5>
-		   		<span class="movie_info">2019</span>
-		   		<span class="movie_info float-right"><i class="fas fa-star"></i> 9 / 10</span>
-		  </div>
-		</div>
-
-				<div class="card movie_card col-2">
-		  <img src="https://www.joblo.com/assets/images/joblo/posters/2019/02/captin-marvel-poster-international.jpg" class="card-img-top" alt="...">
-		  <div class="card-body">
-		    <h5 class="card-title">Captain Marvel</h5>
-		   		<span class="movie_info">2019</span>
-		   		<span class="movie_info float-right"><i class="fas fa-star"></i> 9 / 10</span>
-		  </div>
-		</div>
-
-				<div class="card movie_card col-2">
-		  <img src="https://www.joblo.com/assets/images/joblo/posters/2019/01/Spider-Man-Far-From-Home-poster-1.jpg" class="card-img-top" alt="...">
-		  <div class="card-body">
-		    <h5 class="card-title">Spider-Man: Far From Home</h5>
-		   		<span class="movie_info">2019</span>
-		   		<span class="movie_info float-right"><i class="fas fa-star"></i> 9 / 10</span>
-		  </div>
-		</div>
-
-				<div class="card movie_card col-2" >
-		  <img src="https://www.joblo.com/assets/images/joblo/posters/2019/01/Alita-character-poster-1.jpg" class="card-img-top" alt="...">
-		  <div class="card-body">
-		    <h5 class="card-title">Alita: Battle Angel</h5>
-		   		<span class="movie_info">2019</span>
-		   		<span class="movie_info float-right"><i class="fas fa-star"></i> 9 / 10</span>
-		  </div>
-		</div>
-
-				<div class="card movie_card col-2">
-		  <img src="https://www.joblo.com/assets/images/joblo/posters/2018/11/Spider-Verse-poster-1.jpg" class="card-img-top" alt="...">
-		  <div class="card-body">
-		    <h5 class="card-title">Spider-Man: Into the Spider-Verse</h5>
-		   		<span class="movie_info">2019</span>
-		   		<span class="movie_info float-right"><i class="fas fa-star"></i> 9 / 10</span>
-		  </div>
-		</div>
-
-		<div class="card movie_card col-2">
-			<img src="https://shoptrends.com/pub/media/catalog/product/cache/e6772dd5d7528380fb5dc1448d019df8/r/p/rp18431-1.jpg" class="card-img-top" alt="...">
+<div class="container-m">
+	<div class="row justify-content-left">
+	  <h1>Now showing</h1>
+	  <% movie.forEach(function(movie){ %>
+		  <a href="/movies/<%= movie._id %>" class="card movie_card">
+			<img src="<%= movie.img %>" class="card-img-top" alt="...">
 			<div class="card-body">
-			  <h5 class="card-title">FROZEN 2</h5>
-				<span class="movie_info">2019</span>
-				<span class="movie_info float-right"><i class="fas fa-star"></i> 9 / 10</span>
+			  <h5 class="card-title"><%= movie.name %></h5>
+				<span class="movie_info"><%= movie.date %></span>
 			</div>
-		  </div>
-</div>		  
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-<script>
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-})
-</script>
-
+		  </a>
+		  <% }); %>
+	</div>
+  </div>
+  
 <%- include('../partials/footer.ejs') %>

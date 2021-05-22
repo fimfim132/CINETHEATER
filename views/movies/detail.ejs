@@ -1,13 +1,22 @@
 <%- include('../partials/header.ejs') %>
+
     <div class="container-detail"> 
-        <img class="rounded" src="/images/logo.png" width="100px" height="80px"><iframe class="rounded-trail fluid col-6 float-end" src="https://www.youtube.com/embed/8ugaeA-nMTc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></img>
-        <h1><strong>Ironman</strong></h1>
-        <p class="head-detail">โทนี่ สตาร์ค เป็นนักประดิษฐ์และนักอุตสาหกรรมมหาเศรษฐีพันล้านที่ถูกลักพาตัวไปขณะอยู่ต่างบ้านต่างเมืองแล้วก็ถูกบีบบังคับให้คิดค้นอาวุธที่มีประสิทธิภาพการทำลายล้างสูงแทนที่เขาจะใช้สติปัญญาอันปราดเปรื่อง และแนวคิดอัจฉริยะประดิษฐ์ตามคำสั่ง แต่ว่าโทนี่กลับสร้างชุดเกราะไฮเทคและหนีรอดการถูกจองจำมาได้ พอกลับมายังอเมริกาโทนี่ก็ต้องเผชิญหน้ากับอดีตและล่วงรู้แผนการชั่วร้ายที่มุ่งทำลายล้างโลก เขาจึงต้องสวมชุดเกราะทรงพลังและปฏิญาณว่าจะพิทักษ์โลกใบนี้ในนาม ไอรอน แมน</p>
-        <h5><i class="far fa-clock"></i> 120 min</h5>
-        <h5><i class="fas fa-tag"></i> action</h5>
-        <h5><i class="far fa-calendar"></i> 20/02/64</h5>
+        <img class="rounded" src="<%= movie.img %>" width="100px" height="150px"><iframe class="rounded-trail fluid col-6 float-end" src="<%= movie.trailer %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></img>
+        <h1 class="head-detail"><strong><%= movie.name %></strong></h1>
+        <p class="head-detail"><%= movie.desc %></p>
+        <h5><i class="far fa-clock"></i> <%= movie.time %> min</h5>
+        <h5><i class="fas fa-tag"></i> <%= movie.type %></h5>
+        <h5><i class="far fa-calendar"></i> <%= movie.date %></h5>
     </div>
     <div class="container-comment">
-        <p>comment</p>
+        <form action="/movies/<%= movie._id %>/" method="POST">
+            <div class="mb-3">
+            <h3>Comment</h3>
+            <input type="text" class="form-control" name="comment[text]" placeholder="Comment">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        
     </div>
+
 <%- include('../partials/footer.ejs') %>

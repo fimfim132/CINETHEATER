@@ -1,13 +1,15 @@
 var express     = require('express'),
     Available   = require('../models/available'),
+    Movie       = require('../models/movie'),
     router      = express.Router();
 
+    
 router.get('/', function(req, res){
-    Available.find({}, function(err, allAvailable){
+    Movie.find({}, function(err, allMovie){
         if(err){
             console.log(err);
         } else{
-            res.render('movies/index.ejs', {available: allAvailable});
+            res.render('movies/index.ejs', {movie: allMovie});
         }
     });
 });
@@ -27,15 +29,30 @@ router.post('/', function(req, res){
     });
 });
 
-router.get('/detail',function(req, res){
-    Available.find({}, function(err, allAvailable){
+router.get('/:id', isLoggedIn, function(req, res){
+    Movie.findById(req.params.id, function(err, foundMovie){
         if(err){
             console.log(err);
-        } else{
-            res.render('movies/detail.ejs', {available: allAvailable});
+        } else {
+            res.render('movies/detail.ejs', {movie: foundMovie});
         }
     });
 });
 
+router.post('/:id', isLoggedIn, function(req, res){
+    Movie.findById(req.params.id, function(err, foundMovie){
+        if(err){
+            con
+        }
+    })
+})
+
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    } else {
+        res.redirect('/login');
+    }
+}
 
 module.exports = router;

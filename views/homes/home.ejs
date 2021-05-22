@@ -21,13 +21,13 @@
   <div class="row justify-content-left">
     <h1>Recommend</h1>
     <% movie.forEach(function(movie){ %>
-        <div class="card movie_card">
+        <a href="/movies/<%= movie._id %>" class="card movie_card">
           <img src="<%= movie.img %>" class="card-img-top" alt="...">
           <div class="card-body">
             <h5 class="card-title"><%= movie.name %></h5>
               <span class="movie_info"><%= movie.date %></span>
           </div>
-        </div>
+        </a>
         <% }); %>
   </div>
 </div>
