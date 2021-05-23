@@ -1,6 +1,7 @@
 var express     = require('express'),
     Available   = require('../models/available'),
     Movie       = require('../models/movie'),
+    Comment     = require('../models/comment'),
     router      = express.Router();
 
     
@@ -30,7 +31,7 @@ router.post('/', function(req, res){
 });
 
 router.get('/:id', isLoggedIn, function(req, res){
-    Movie.findById(req.params.id, function(err, foundMovie){
+    Movie.findById(req.params.id).populate('comments').exec(function(err, foundMovie){
         if(err){
             console.log(err);
         } else {
@@ -42,10 +43,23 @@ router.get('/:id', isLoggedIn, function(req, res){
 router.post('/:id', isLoggedIn, function(req, res){
     Movie.findById(req.params.id, function(err, foundMovie){
         if(err){
-            con
+            console.log(err);
+        } else {
+            Comment.create(req.body.comment, function(err, comment){
+                if(err){
+                    console.log(err);
+                } else {
+                    comment.author.id == req.user._id;
+                    comment.author.username = req.user.username;
+                    comment.save();
+                    foundMovie.comments.push(comment);
+                    foundMovie.save();
+                    res.redirect('/movies/' + foundMovie._id);
+                }
+            });
         }
-    })
-})
+    });
+});
 
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){

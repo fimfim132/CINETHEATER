@@ -1,10 +1,10 @@
 <%- include('../partials/header.ejs') %>
 <div class="container">
     <h1 class="mb-3">Edit movie</h1>
-    <form action="/admin" method="POST" enctype="multipart/form-data">
+    <form action="/movies/<%= movie._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
         <div class="mb-3">
             <label class="form-label">Title name</label>
-            <input type="text" class="form-control" name="name" placeholder="Title name">
+            <input type="text" class="form-control" name="movie[name]" placeholder="<%= movie.name %>" value="<%= movie.name %>">
         </div>
         <div class="mb-3">
             <label class="form-label">Poster</label>
@@ -12,23 +12,23 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Trailer</label>
-            <input type="text" class="form-control" name="trailer" placeholder="Link trailer">
+            <input type="text" class="form-control" name="movie[trailer]" placeholder="Link trailer">
         </div>
         <div class="mb-3">
             <label class="form-label">time</label>
-            <input type="text" class="form-control" name="time" placeholder="Time">
+            <input type="text" class="form-control" name="movie[time]" placeholder="Time">
         </div>
         <div class="mb-3">
             <label class="form-label">type</label>
-            <input type="text" class="form-control" name="type" placeholder="Type">
+            <input type="text" class="form-control" name="movie[type]" placeholder="Type">
         </div>
         <div class="mb-3">
             <label class="form-label">Description</label>
-            <input type="text" class="form-control" name="desc" placeholder="Description">
+            <input type="text" class="form-control" name="movie[desc]" placeholder="Description">
         </div>
         <div class="mb-3">
             <label class="form-label">Date</label>
-            <input type="date" class="form-control" name="date" placeholder="Date">
+            <input type="date" class="form-control" name="movie[date]" placeholder="Date">
         </div>
         <div class="mb-3">
             <input type="submit" value="Add movie">

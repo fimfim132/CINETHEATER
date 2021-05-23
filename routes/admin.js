@@ -37,7 +37,7 @@ router.post('/add',upload.single('img'),  function(req, res){
 });
 
 router.get('/edit', function(req, res){
-    res.render('admin/cinema.ejs');
+    res.render('admin/edit.ejs');
 });
 
 module.exports = router;

@@ -5,6 +5,7 @@ const   express         = require('express'),
         passport        = require('passport'),
         LocalStrategy   = require('passport-local'),
         User            = require('./models/user'),
+        methodOverride  = require('method-override'),
         seedDB          = require('./seed'),
         Schema          = mongoose.Schema;
         
@@ -17,7 +18,7 @@ mongoose.connect('mongodb://localhost:27017/project');
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
-app.use(express.static(__dirname + 'public'));
+app.use(methodOverride('_method'));
 
 app.use(require('express-session')({
     secret: 'secret is always secret.',
