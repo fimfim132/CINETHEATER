@@ -1,6 +1,7 @@
 var express     = require('express'),
     multer      = require('multer'),
     Movie       = require('../models/movie'),
+    Cinema      = require('../models/cinema'),
     path        = require('path'),
     storage     = multer.diskStorage({
                     destination: function(req, file, callback){
@@ -19,14 +20,13 @@ var express     = require('express'),
     upload = multer({storage: storage, fileFilter: imgFilter}),
     router      = express.Router();
 
-router.get('/add', function(req, res){
+router.get('/add/movie', function(req, res){
     res.render('admin/movie.ejs');
 });
 
-router.post('/add',upload.single('img'),  function(req, res){
+router.post('/add/movie',upload.single('img'),  function(req, res){
     req.body.movie
     req.body.movie.img = '/uploads/'+ req.file.filename;
-    // var newMovie = {name: name, img: img, trailer: trailer, desc: desc, time: time, type: type, date: date};
     Movie.create(req.body.movie, function(err, newlyCreated){
         if(err){
             console.log(err);
@@ -36,8 +36,41 @@ router.post('/add',upload.single('img'),  function(req, res){
     });
 });
 
-router.get('/edit', function(req, res){
-    res.render('admin/edit.ejs');
+router.get('/:id/edit', function(req, res){
+    Movie.findById(req.params.id, function(err, foundMovie){
+        if(err){
+            console.log(err);
+        } else {
+            res.render('admin/edit.ejs', {movie: foundMovie});
+        }
+    });
 });
+
+router.get('/add/cinema', function(req, res){
+    res.render('admin/cinema.ejs');
+});
+
+router.post('/add/cinema', function(req, res){
+    Cinema.create(req.body.cinema, function(err, newlyCreated){
+        if(err){
+            console.log(err);
+        } else {
+            res.redirect('/cinemas');
+        }
+    });
+});
+
+router.delete('/:id', function(req, res){
+    Movie.findByIdAndRemove(req.params.id, function(err){
+        if(err){
+            console.log(err);
+            res.redirect('/movies/');
+        } else {
+            res.redirect('/movies/');
+        }
+    });
+});
+
+
 
 module.exports = router;

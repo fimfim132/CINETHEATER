@@ -38,7 +38,7 @@
   background: transparent;
   font-size: 30px;
   border: none;
-  padding: 10px;
+  padding:  10px;
   color: gray;
 }
 #next-btn:focus,
@@ -65,6 +65,7 @@ pointer-events: none;
 }
 .movie_head{
   margin: 30px 0 0 310px;
+  text-decoration: none;
 }
 .movie_card{
 padding: 0 !important;
@@ -72,14 +73,18 @@ width: 15rem;
 margin:14px; 
 border-radius: 10px;
 box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2), 0 4px 15px 0 rgba(0, 0, 0, 0.19);
+text-decoration: none;
 }
+
 .movie_card img{
 border-top-left-radius: 10px;
 border-top-right-radius: 10px;
 height: 20rem;
+text-decoration: none;
 }
 .movie_info{
 color: #5e5c5c;
+text-decoration: none;
 }
 
 .movie_info i{
@@ -118,6 +123,7 @@ cursor: pointer;
 
 .container-detail{
   margin: 0 auto;
+  margin-bottom: 90px;
   width: 90%;
   position: relative;
 }
@@ -125,6 +131,7 @@ cursor: pointer;
 .head-detail{
   margin-bottom: 30px;
   width: 650px;
+  text-decoration: none;
 }
 
 .container-comment{
@@ -142,3 +149,27 @@ cursor: pointer;
 .head-com{
   margin-top: 30px;
 }
+
+.edit{
+  margin: 30px 0px 0px 90px;
+}
+
+#delete-form{
+  display: inline;
+}
+
+.card-title1{
+  margin: 20px auto;
+}
+.icon{
+  margin: 25px 0px 0px 25px;
+}
+
+.cinema_card{
+  padding: 0 !important;
+  width: 20rem;
+  margin:14px; 
+  border-radius: 10px;
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2), 0 4px 15px 0 rgba(0, 0, 0, 0.19);
+  text-decoration: none;
+  }

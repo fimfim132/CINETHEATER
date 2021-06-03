@@ -6,6 +6,7 @@ const   express         = require('express'),
         LocalStrategy   = require('passport-local'),
         User            = require('./models/user'),
         methodOverride  = require('method-override'),
+        flash           = require('connect-flash'),
         seedDB          = require('./seed'),
         Schema          = mongoose.Schema;
         
@@ -16,6 +17,7 @@ var indexRoutes         = require('./routes/index'),
 
 mongoose.connect('mongodb://localhost:27017/project');
 app.set('view engine', 'ejs');
+app.use(flash());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
 app.use(methodOverride('_method'));
@@ -33,6 +35,8 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use(function(req,res,next){
     res.locals.currentUser = req.user;
+    res.locals.error = req.flash('error');
+    res.locals.success = req.flash('success');
     next();
 });
 

@@ -1,0 +1,15 @@
+<%- include('../partials/header.ejs') %>
+<div class="container">
+    <h1 class="mb-3">Add cinema</h1>
+    <form action="/admin/add/cinema" method="POST">
+        <div class="mb-3">
+            <label class="form-label">Cinema name</label>
+            <input type="text" class="form-control" name="cinema[name]" placeholder="Cinema name">
+        </div>
+        <div class="mb-3">
+            <input type="submit" value="Add Cinema">
+        </div>
+    </form>
+</div>
+
+<%- include('../partials/footer.ejs') %>

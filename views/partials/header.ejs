@@ -51,8 +51,8 @@
                         <li><a href="/" class="nav-link px-2 text-white">Home</a></li>
                         <li><a href="/movies" class="nav-link px-2 text-white">Movies</a></li>
                         <li><a href="/cinemas" class="nav-link px-2 text-white">Cinemas</a></li>
-                        <li><a href="/admin/add" class="nav-link px-2 text-white">Add movie</a></li>
-                        <li><a href="/admin/edit" class="nav-link px-2 text-white">Edit movie</a></li>
+                        <li><a href="/admin/add/movie" class="nav-link px-2 text-white">Add movie</a></li>
+                        <li><a href="/admin/add/cinema" class="nav-link px-2 text-white">Add cinema</a></li>
                         </ul>
                 <% }%>
                 <div class="text-end">
@@ -62,3 +62,16 @@
                 <% } %>
             </div>
     </header>
+
+    <div class="container-flash">
+    <% if(error && error.length > 0) { %>
+        <div class='alert alert-danger' role="alert">
+        <%= error %>
+        </div>
+    <% } %>
+    <% if(success && success.length > 0) { %>
+        <div class='alert alert-success' role="alert">
+        <%= success %>
+        </div>
+    <% } %>
+</div>
