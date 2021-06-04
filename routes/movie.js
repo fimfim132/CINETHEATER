@@ -3,10 +3,10 @@ const middlewareObj = require('../middleware');
 
 var express     = require('express'),
     Available   = require('../models/available'),
-    multer      = require('multer'),
     middleware  = require('../middleware'),
     Movie       = require('../models/movie'),
     Comment     = require('../models/comment'),
+    multer      = require('multer'),
     path        = require('path'),
     storage     = multer.diskStorage({
                     destination: function(req, file, callback){

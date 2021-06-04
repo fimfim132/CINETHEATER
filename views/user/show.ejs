@@ -1,0 +1,7 @@
+<%- include('../partials/header.ejs') %>
+<img src="<%= user.profileImage %>" width="300px">
+<h1><%= user.firstName + '   ' + user.lastName %></h1>
+<p><a href="mailto: <%= user.email %>"> <%= user.email %> </a>
+</p>
+
+<%- include('../partials/footer.ejs') %>
