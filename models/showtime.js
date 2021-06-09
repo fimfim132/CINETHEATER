@@ -1,19 +1,20 @@
 var mongoose = require('mongoose');
 
-var cinemaSchema = new mongoose.Schema({
-    name: String,
-    movie:  [
+var showtimeSchema = new mongoose.Schema({
+    date: String,
+    time: String,
+    movie: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Movie'
         }
     ],
-    theater: [
+    seat: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Theater'
+            ref: 'Showtime'
         }
     ]
 });
 
-module.exports = mongoose.model('Cinema', cinemaSchema);
+module.exports = mongoose.model('Showtime', showtimeSchema);

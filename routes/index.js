@@ -3,6 +3,7 @@ var express     = require('express'),
     Slide       = require('../models/slide'),
     User        = require('../models/user'),
     Movie       = require('../models/movie'),
+    middleware  = require('../middleware'),
     passport    = require('passport'),
     multer      = require('multer'),
     path        = require('path'),
@@ -46,6 +47,15 @@ router.get('/', function(req, res){
 // gteใช้กับเข้าฉายแล้วมltยังไม่เข้าฉาย
 
 router.post('/', function(req, res){
+    const word = req.body.search;
+    Movie.find({$or:[{name: {$regex: word, $options: 'i'}}, {type: {$regex: word, $options: 'i'}}]}).sort({date:1}).exec(function(err, foundMovie){
+        if(err){
+            req.flash('error', err.message);
+            console.log(err);
+        } else {
+            res.render('homes/search.ejs', {movie: foundMovie, word: word});
+        }
+    });
 });
 
 router.get('/register', function(req, res){
@@ -100,6 +110,43 @@ router.get('/user/:id', function(req,res){
             return res.redirect('/');
         } else {
             res.render('user/show.ejs', {user: foundUser});
+        }
+    });
+});
+
+router.get('/user/:id/edit', middleware.isLoggedIn, function(req,res){
+    User.findById(req.params.id, function(err, foundUser){
+        if(err){
+            req.flash('error', 'Information');
+            return res.redirect('/');
+        } else {
+            res.render('user/edit.ejs', {user: foundUser});
+        }
+    });
+});
+
+router.put('/user/:id', middleware.isLoggedIn, upload.single('img'), function(req, res){
+    if(req.file){
+        req.body.user.profileImage = '/upload' + req.file.file.name;
+    }
+    User.findByIdAndUpdate(req.params.id, req.body.user, function(err, updatedMovie){
+        if(err){
+            res.redirect('/user/' + req.params.id);
+        } else {
+            res.redirect('/user/' + req.params.id);
+        }
+    });
+});
+
+router.delete('/user/:id', function(req, res){
+    User.findByIdAndRemove(req.params.id, function(err){
+        if(err){
+            console.log(err);
+            res.redirect('/');
+        } else {
+            req.logout();
+            req.flash('success', 'Delete user successfully');
+            res.redirect('/');
         }
     });
 });

@@ -1,0 +1,39 @@
+<%- include('../partials/header.ejs') %>
+<div class="container">
+    <h1 class="mb-3">Edit information</h1>
+    <form action="/user/<%= user._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+            <label class="form-label">First Name</label>
+        <div class="input-group mb-3">
+            <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+            </div>
+            <input type="text" name="user[firstName]" class="form-control input_user" value="<%= user.firstName %>" placeholder="<%= user.firstName %>">
+        </div>
+            <label class="form-label">Last Name</label>
+        <div class="input-group mb-3">
+            <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+            </div>
+            <input type="text" name="user[lastName]" class="form-control input_user" value="<%= user.lastName %>" placeholder="<%= user.lastName %>">
+        </div>
+            <label class="form-label">Email</label>
+        <div class="input-group mb-3">
+            <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-at"></i></span>
+            </div>
+            <input type="email" name="user[email]" class="form-control input_user" value="<%= user.email %>" placeholder="<%= user.email %>">
+        </div>
+        <label class="form-label">Photo</label>
+        <div class="input-group mb-3">
+            <div class="input-group-append">
+                <span class="input-group-text"><i class="far fa-images"></i></span>
+            </div>
+            <input type="file" name="profileImage" class="form-control input_user" accept="image/*">
+        </div>
+        <div class="mb-3">
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+</div>
+
+<%- include('../partials/footer.ejs') %>

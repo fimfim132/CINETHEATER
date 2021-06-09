@@ -2,7 +2,7 @@
 
 <div class="container-m">
 	<div class="row justify-content-left">
-	  <h1>Now showing</h1>
+        <h1>Your result of <%= word %></h1>
 	  <% movie.forEach(function(movie){ %>
 		  <a href="/movies/<%= movie._id %>" class="card movie_card">
 			<img src="<%= movie.img %>" class="card-img-top" alt="...">
@@ -15,19 +15,4 @@
 	</div>
   </div>
 
-  <div class="container-m">
-	<div class="row justify-content-left">
-	  <h1>Comming soon</h1>
-	  <% come.forEach(function(come){ %>
-		  <a href="/movies/<%= come._id %>" class="card movie_card">
-			<img src="<%= come.img %>" class="card-img-top" alt="...">
-			<div class="card-body">
-			  <h5 class="card-title text-dark"><%= come.name %></h5>
-				<span class="movie_info text-dark"><%= come.date %></span>
-			</div>
-		  </a>
-		  <% }); %>
-	</div>
-  </div>
-  
 <%- include('../partials/footer.ejs') %>

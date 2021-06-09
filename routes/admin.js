@@ -60,6 +60,10 @@ router.post('/add/cinema', function(req, res){
     });
 });
 
+router.get('/cinema/:id/add', function(req, res){
+    res.render('cinemas/movie.ejs');
+});
+
 router.delete('/:id', function(req, res){
     Movie.findByIdAndRemove(req.params.id, function(err){
         if(err){

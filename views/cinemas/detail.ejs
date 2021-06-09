@@ -1,32 +1,18 @@
 <%- include('../partials/header.ejs') %>
 
-    <div class="container-detail"> 
-        <img class="rounded" src="<%= movie.img %>" width="100px" height="150px"><iframe class="rounded-trail fluid col-6 float-end" src="<%= movie.trailer %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></img>
-        <h1 class="head-detail"><strong><%= movie.name %></strong></h1>
-        <p class="head-detail"><%= movie.desc %></p>
-        <h5><i class="far fa-clock"></i> <%= movie.time %> min</h5>
-        <h5><i class="fas fa-tag"></i> <%= movie.type %></h5>
-        <h5><i class="far fa-calendar"></i> <%= movie.date %></h5>
-    </div>
     <% if(currentUser.username == 'admin'){ %>
+       
     <div class="edit">
-        <a href="/admin/<%= movie._id %>/edit" class="btn btn-outline-primary">Edit movie</a>
-        <form id="delete-form" action="/admin/<%= movie._id %>?_method=DELETE" method="POST">
-            <button class="btn btn-danger">Delete movie</button>
-        </form> 
-    </div>
-    <% } %>
-    <div class="container-comment">
-            <h3>Comment</h3>
-        <% movie.comments.forEach(function(comment){ %>
-        <p class="head-com"><strong><%= comment.author.username %></strong> - <%= comment.text %></p>
-        <% }); %>
-        <form action="/movies/<%= movie._id %>/" method="POST">
-            <div class="mb-3">
-            <input type="text" class="form-control" name="comment[text]" placeholder="add comment">
-            </div>
-            <button type="submit" class="btn btn-outline-primary">Submit</button>
+        <form action="/cinemas/<%= cinema.id %>" method="POST">
+        <p>Add movie to your cinema</p>
+        <select name="movie">
+            <% movie.forEach(function(movie){ %>
+            <option value="<%= movie.id %>"><%= movie.name %></option>
+		    <% }); %>
+        </select>
+        <input type="submit">
         </form>
     </div>
+    <% } %>
 
 <%- include('../partials/footer.ejs') %>

@@ -1,8 +1,4 @@
-const { checkCommentOwner } = require('../middleware');
-const middlewareObj = require('../middleware');
-
 var express     = require('express'),
-    Available   = require('../models/available'),
     middleware  = require('../middleware'),
     Movie       = require('../models/movie'),
     Comment     = require('../models/comment'),
@@ -32,11 +28,17 @@ var express     = require('express'),
     today = yyyy + '-' + mm + '-' + dd;
     
 router.get('/', function(req, res){
-    Movie.find({}).sort({date:1}).exec(function(err, allMovie){
+    Movie.find({date:{$lte:today}}).sort({date:1}).exec(function(err, allMovie){
         if(err){
             console.log(err);
         } else{
-            res.render('movies/index.ejs', {movie: allMovie});
+             Movie.find({date:{$gt:today}}).sort({date:1}).exec(function(err, allComming){
+                if(err){
+                    console.log(err);
+                } else{
+                    res.render('movies/index.ejs', {movie: allMovie, come: allComming});
+                }
+            }); 
         }
     });
 });
