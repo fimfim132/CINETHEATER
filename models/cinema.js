@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var cinemaSchema = new mongoose.Schema({
     name: String,
-    movie:  [
+    movies:  [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Movie'

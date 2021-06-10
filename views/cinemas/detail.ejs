@@ -3,15 +3,39 @@
     <% if(currentUser.username == 'admin'){ %>
        
     <div class="edit">
-        <form action="/cinemas/<%= cinema.id %>" method="POST">
+        <form action="/cinemas/<%= cinema.id %>" method="POST" class="addmovies">
         <p>Add movie to your cinema</p>
-        <select name="movie">
+        <select name="movies">
             <% movie.forEach(function(movie){ %>
             <option value="<%= movie.id %>"><%= movie.name %></option>
 		    <% }); %>
         </select>
         <input type="submit">
         </form>
+            <div class="row justify-content-left">
+                <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>name</th>
+                        <th>time</th>
+                        <th>date</th>
+                        <th>manage</th>
+                    </tr>
+                    </thead>
+        <% if(cinema.movies.length !=0){ %>
+            <% cinema.movies.forEach(function(movies){ %>
+                    <tbody>
+                        <th><%= movies.name %></th>
+                        <th><%= movies.time %></th>
+                        <th><%= movies.date %></th>
+                        <th><form id="delete-form" action="/cinemas/<%= cinema._id %>/<%= movies._id %>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger">Delete user</button>
+                        </form> </th>
+                    </tbody>
+            <% }); %>
+        <% } %>
+                </table>
+            </div>
     </div>
     <% } %>
 
