@@ -70,7 +70,7 @@ pointer-events: none;
 .movie_card{
 padding: 0 !important;
 width: 15rem;
-margin:14px; 
+margin:20px 40px 20px 40px; 
 border-radius: 10px;
 box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2), 0 4px 15px 0 rgba(0, 0, 0, 0.19);
 text-decoration: none;
@@ -142,7 +142,7 @@ cursor: pointer;
 
 .container-m{
   margin: 30px 0px 0px 160px;
-  width: 100%;
+  width: 90%;
   position: relative;
 }
 
@@ -276,3 +276,27 @@ cursor: pointer;
   .addmovies{
     margin-bottom: 30px;
   }
+
+  .theater{
+    margin: 30px 0px 0px 0px;
+  }
+
+  .select{
+    margin-left: 10px;
+  }
+
+  .show{
+    padding: 0 !important;
+    margin:14px; 
+    border-radius: 10px;
+    text-decoration: none;
+    }
+
+    .img{
+      width: 190px;
+      height: 300px;
+    }
+
+    .top100{
+      margin-top: 70px;
+    }

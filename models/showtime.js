@@ -12,7 +12,7 @@ var showtimeSchema = new mongoose.Schema({
     seat: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Showtime'
+            ref: 'Seat'
         }
     ]
 });

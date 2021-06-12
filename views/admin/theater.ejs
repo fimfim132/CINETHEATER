@@ -1,0 +1,23 @@
+<%- include('../partials/header.ejs') %>
+<div class="container">
+    <h1 class="mb-3">Edit theater</h1>
+    <form action="/admin/<%= theater._id %>?_method=PUT" method="POST">
+        <div class="mb-3">
+            <label class="form-label">Theater name</label>
+            <input type="text" class="form-control" name="theater[name]" placeholder="<%= theater.name %>" value="<%= theater.name %>">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Number of seat</label>
+            <select name="theater[numofseat]" class="select">
+                <% for(i=1;i<=10;i++){ %>
+                <option value="<%= i %>"><%= i %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="mb-3">
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+</div>
+
+<%- include('../partials/footer.ejs') %>

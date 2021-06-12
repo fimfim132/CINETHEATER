@@ -1,7 +1,9 @@
+
 var express     = require('express'),
     multer      = require('multer'),
     Movie       = require('../models/movie'),
     Cinema      = require('../models/cinema'),
+    Theater     = require('../models/theater'),
     path        = require('path'),
     storage     = multer.diskStorage({
                     destination: function(req, file, callback){
@@ -55,13 +57,45 @@ router.post('/add/cinema', function(req, res){
         if(err){
             console.log(err);
         } else {
+            for(i=1; i <= req.body.numoftheater; i++){
+                Theater.create({name: i}, function(err, createTheater){
+                    if(err){
+                        console.log(err);
+                    }else{
+                        Cinema.findOneAndUpdate({"_id": newlyCreated._id}, {$push: {theaters: createTheater._id}}).exec(function(err, pushTheater){
+                            if(err){
+                                console.log(err);
+                            }else{
+                                console.log(pushTheater);
+                            }
+                        })
+                    }
+                });
+            }
             res.redirect('/cinemas');
         }
     });
 });
 
-router.get('/cinema/:id/add', function(req, res){
-    res.render('cinemas/movie.ejs');
+router.get('/:id', function(req, res){
+    Theater.findById(req.params.id, function(err, foundTheater){
+        if(err){
+            console.log(err);
+        } else {
+            res.render('admin/theater.ejs', {theater: foundTheater});
+        }
+    });
+});
+
+
+router.put('/:theaters_id', function(req, res){
+    Theater.findByIdAndUpdate(req.params.theaters_id, req.body.theater, function(err, updatedMovie){
+        if(err){
+            console.log(err);
+        } else {
+            res.redirect('/cinemas');
+        }
+    });
 });
 
 router.delete('/:id', function(req, res){

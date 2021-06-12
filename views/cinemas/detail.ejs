@@ -29,7 +29,7 @@
                         <th><%= movies.time %></th>
                         <th><%= movies.date %></th>
                         <th><form id="delete-form" action="/cinemas/<%= cinema._id %>/<%= movies._id %>?_method=DELETE" method="POST">
-                            <button class="btn btn-danger">Delete user</button>
+                            <button class="btn btn-danger">Delete movie</button>
                         </form> </th>
                     </tbody>
             <% }); %>
@@ -37,6 +37,91 @@
                 </table>
             </div>
     </div>
+
+    <div class="edit">
+        <p>Your theater</p>
+        <div class="row justify-content-left">
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>name</th>
+                    <th>seat</th>
+                    <th>manage</th>
+                </tr>
+                </thead>
+                <% if(cinema.theaters.length !=0){ %>
+                <% cinema.theaters.forEach(function(theaters){ %>
+                <tbody>
+                    <th><%= theaters.name %></th>
+                    <th><%= theaters.numofseat %></th>
+                    <th>
+                        <a href="/admin/<%= theaters._id %>" class="btn btn-outline-primary">Edit theater</a>
+                        <form id="delete-form" action="/cinemas/<%= cinema._id %>/<%= theaters._id %>" method="POST">
+                            <button class="btn btn-danger">Delete theater</button>
+                        </form> 
+                    </th>
+                </tbody>
+        <% }); %>
+    <% } %>
+            </table>
+        </div>
+    </div>
+
+    
+    <div class="edit">
+        <p>Create showtime</p>
+            <form action="/cinemas/<%= cinema._id %>/createshowtime" method="POST">
+                <label class="form-label">Movie name</label>
+                <select name="showtime[movie]" class="select">
+                    <% cinema.movies.forEach(function(movies){ %>
+                        <option value="<%= movies.id %>"><%= movies.name %></option>
+                    <% }); %>
+                </select>
+                <label class="form-label">Theater name</label>
+                <select name="theater" class="select">
+                    <% cinema.theaters.forEach(function(theaters){ %>
+                        <option value="<%= theaters.id %>"><%= theaters.name %></option>
+                    <% }); %>
+                </select>
+                <label class="form-label">Date</label>
+                <input type="date" class="select" name="showtime[date]" placeholder="Date">
+                <label class="form-label">Time</label>
+                <input type="time" class="select" name="showtime[time]" placeholder="Time">
+                <input type="submit">
+            </form>
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>theater</th>
+                    <th>movie</th>
+                    <th>date</th>
+                    <th>time</th>
+                    <th>manage</th>
+                </tr>
+                </thead>
+    
+                <tbody>
+                
+                <% cinema.theaters.forEach(function(theaters){ %>
+                    <% if(theaters.showtime.length !=0){ %>
+                    <tr>
+                        <% theaters.showtime.forEach(function(showtime){ %>
+                            <% showtime.movie.forEach(function(movie){ %>
+                        <th><%= theaters.name %></th>
+                        <th><%= movie.name %></th>
+                        <th><%= showtime.date %></th>
+                        <th><%= showtime.time %></th>
+                        <th>manage</th>
+                    </tr>
+                    <% }); %>
+                <% }); %>
+        <% } %>
+        <% }); %>
+                </tbody>
+            </table>
+    </div>
+
+
     <% } %>
 
 <%- include('../partials/footer.ejs') %>

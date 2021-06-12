@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var theaterSchema = new mongoose.Schema({
     name: String,
-    numofseat: Number,
+    numofseat: String,
     showtime: [
         {
             type: mongoose.Schema.Types.ObjectId,

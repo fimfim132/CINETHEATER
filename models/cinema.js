@@ -8,7 +8,7 @@ var cinemaSchema = new mongoose.Schema({
             ref: 'Movie'
         }
     ],
-    theater: [
+    theaters: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Theater'

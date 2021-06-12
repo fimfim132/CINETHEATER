@@ -1,0 +1,26 @@
+<%- include('../partials/header.ejs') %>
+    <div class="container">
+            <% cinema.theaters.forEach(function(theater){ %>
+                <% if(theater.showtime.length !=0){ %>  
+<div class="top100"> 
+            <h1>Theater <%= theater.name %></h1>
+            
+            <% theater.showtime.forEach(function(showtime){ %>
+            <% showtime.movie.forEach(function(movie){ %>
+        <div class="row show"> 
+            <a href="/theater/theater._id">
+                <img src="<%= movie.img %>" width="100px" class="card img">
+                <h5><%= movie.name %></h5>
+                <p><i class="far fa-calendar"></i> <%= showtime.date %></p>
+                <p><i class="far fa-clock"></i> <%= showtime.time %></p>
+            </a>
+        </div>
+            <% }); %>
+        <% }); %>
+        <hr>
+    <% } %>
+    <% }); %>
+
+    </div>
+</div>
+<%- include('../partials/footer.ejs') %>
