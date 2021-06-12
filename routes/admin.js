@@ -3,6 +3,7 @@ var express     = require('express'),
     multer      = require('multer'),
     Movie       = require('../models/movie'),
     Cinema      = require('../models/cinema'),
+    Comment     = require('../models/comment'),
     Theater     = require('../models/theater'),
     path        = require('path'),
     storage     = multer.diskStorage({
@@ -20,7 +21,7 @@ var express     = require('express'),
         callback(null, true);
     },
     upload = multer({storage: storage, fileFilter: imgFilter}),
-    router      = express.Router();
+    router      = express.Router({mergeParams: true});
 
 router.get('/add/movie', function(req, res){
     res.render('admin/movie.ejs');

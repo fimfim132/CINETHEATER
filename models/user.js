@@ -7,7 +7,13 @@ var UserSchema = new mongoose.Schema({
     password: String,
     firstName: String,
     lastName: String,
-    profileImage: String
+    profileImage: String,
+    favorite: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Movie'
+        }
+    ]
 });
 
 UserSchema.plugin(passportLocalMongoose);

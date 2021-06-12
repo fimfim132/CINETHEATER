@@ -26,7 +26,18 @@
     <% } else { %> 
         <div class="container-detail"> 
             <img class="rounded" src="<%= movie.img %>" width="100px" height="150px"><iframe class="rounded-trail fluid col-6 float-end" src="<%= movie.trailer %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></img>
-            <h1 class="head-detail"><strong><%= movie.name %></strong></h1>
+            <h1 class="head-detail"><strong><%= movie.name %></strong></h1>     
+            <% var f=0 %>
+                <% currentUser.favorite.forEach(function(favorite){ %>
+                    <% if(favorite.equals(movie._id)){ %>       
+                        <% f++; %>
+                    <% }else{}%>
+                    <% }); %>
+            <% if(f==1){ %>
+                    <h1><form action="/movies/<%= movie._id %>/unfav" method="POST"><button class="unfav"><i class="fas fa-heart"></i></button></form></h1> 
+                    <% } else { %>
+                    <h1><form action="/movies/<%= movie._id %>/fav" method="POST"><button class="fav"><i class="far fa-heart"></i></button></form></h1> 
+                    <% } %> 
             <p class="head-detail"><%= movie.desc %></p>
             <h5><i class="far fa-clock"></i> <%= movie.time %> min</h5>
             <h5><i class="fas fa-tag"></i> <%= movie.type %></h5>
@@ -45,12 +56,42 @@
         <hr>
             <h3>Comment</h3>
         <% movie.comments.forEach(function(comment){ %>
-        <p class="head-com"><strong><%= comment.author.username %></strong> - <%= comment.text %></p>
+            <div class="row">
+        <p class=" col-6 head-com"><strong><%= comment.author.username %></strong> - <%= comment.text %></p>
+        <p class="col-2 head-come">
+            <% for(i=1;i<=comment.rate;i++){ %>
+                <i class="fas fa-star"></i>
+            <% } %>
+        </p>
+        <form action="/movies/<%= movie.id %>/<%= comment.id %>?_method=DELETE" method="POST" class="col-1 head-com">
+            <button class="fas fa-times"></button>
+        </form>
+            </div>
         <% }); %>
+        <div class="row">
         <form action="/movies/<%= movie._id %>/" method="POST">
             <div class="mb-3">
-            <input type="text" class="form-control" name="comment[text]" placeholder="add comment">
+            <input type="text" class="col-5 form-control" name="comment[text]" placeholder="add comment" required>
+            <div class="col-3 feedback">
+                <div class="rating">
+                  <input type="radio" name="comment[rate]" id="rating-5" value="5">
+                  <label for="rating-5"></label>
+                  
+                  <input type="radio" name="comment[rate]" id="rating-4" value="4">
+                  <label for="rating-4"></label>
+                  
+                  <input type="radio" name="comment[rate]" id="rating-3" value="3">
+                  <label for="rating-3"></label>
+                  
+                  <input type="radio" name="rcomment[rate]" id="rating-2" value="2">
+                  <label for="rating-2"></label>
+                  
+                  <input type="radio" name="comment[rate]" id="rating-1" value="1">
+                  <label for="rating-1"></label>
+                </div>
+              </div>
             </div>
+        </div>
             <button type="submit" class="btn btn-outline-primary">Submit</button>
         </form>
     </div>

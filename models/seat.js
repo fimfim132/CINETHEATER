@@ -2,12 +2,12 @@ var mongoose = require('mongoose');
 
 var seatSchema = new mongoose.Schema({
     seatnum: String,
-    available: [
+    available:
         {
             type: Boolean,
             default: true
         }
-    ],
+    ,
     customer: [
         {
             type: mongoose.Schema.Types.ObjectId,

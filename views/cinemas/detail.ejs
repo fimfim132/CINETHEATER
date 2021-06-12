@@ -106,14 +106,14 @@
                     <% if(theaters.showtime.length !=0){ %>
                     <tr>
                         <% theaters.showtime.forEach(function(showtime){ %>
-                            <% showtime.movie.forEach(function(movie){ %>
                         <th><%= theaters.name %></th>
-                        <th><%= movie.name %></th>
+                        <th><%= showtime.movie.name %></th>
                         <th><%= showtime.date %></th>
                         <th><%= showtime.time %></th>
-                        <th>manage</th>
-                    </tr>
-                    <% }); %>
+                        <th><form id="delete-form" action="/cinemas/<%= cinema._id %>/<%= theaters._id %>/showtime/<%= showtime._id %>" method="POST">
+                            <button class="btn btn-danger">Delete showtime</button>
+                        </form></th>
+                    </tr>   
                 <% }); %>
         <% } %>
         <% }); %>

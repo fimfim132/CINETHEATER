@@ -2,6 +2,7 @@ var express     = require('express'),
     middleware  = require('../middleware'),
     Movie       = require('../models/movie'),
     Comment     = require('../models/comment'),
+    User        = require('../models/user'),
     multer      = require('multer'),
     path        = require('path'),
     storage     = multer.diskStorage({
@@ -19,7 +20,7 @@ var express     = require('express'),
         callback(null, true);
     },
     upload = multer({storage: storage, fileFilter: imgFilter}),
-    router      = express.Router();
+    router      = express.Router({mergeParams: true});
 
     let today = new Date(),
     dd = String(today.getDate()).padStart(2, '0').toLocaleString('en-US',{timeZone:'Asia/Bangkok'}),
@@ -42,6 +43,16 @@ router.get('/', function(req, res){
         }
     });
 });
+
+router.delete('/:movie_id/:comment_id', function(req, res){
+    Comment.findOneAndRemove(req.params.comment_id, function(err){
+    if(err){
+        console.log(err);
+    } else {
+        res.redirect('/movies/'+req.params.movie_id);
+    }
+    })
+})
 
 router.post('/', function(req, res){
     var img = req.body.img;
@@ -77,6 +88,7 @@ router.post('/:id', middleware.isLoggedIn, function(req, res){
                 if(err){
                     console.log(err);
                 } else {
+                    console.log(req.body.comment)
                     comment.author.id == req.user._id;
                     comment.author.username = req.user.username;
                     comment.save();
@@ -85,6 +97,35 @@ router.post('/:id', middleware.isLoggedIn, function(req, res){
                     res.redirect('/movies/' + foundMovie._id);
                 }
             });
+        }
+    });
+});
+
+router.post('/:movie_id/fav', middleware.isLoggedIn, function(req, res){
+    User.findById(req.user, function(err, foundUser){
+        if(err){
+            console.log(err);
+        } else {
+            foundUser.favorite.push(req.params.movie_id);
+            foundUser.save();
+            res.redirect('back');
+        }
+    });
+});
+
+router.post('/:movie_id/unfav', middleware.isLoggedIn, function(req, res){
+    User.findById(req.user, function(err, foundUser){
+        if(err){
+            console.log(err);
+        } else {
+            foundUser.favorite.forEach(function(favorite){
+                if(favorite.equals(req.params.movie_id)){
+                    const  index = foundUser.favorite.indexOf(req.params.movie_id);
+                    foundUser.favorite.splice(index, 1);
+                    foundUser.save();
+                }
+            });
+            res.redirect('back');
         }
     });
 });

@@ -104,7 +104,7 @@ router.get('/logout', function(req, res){
 });
 
 router.get('/user/:id', function(req,res){
-    User.findById(req.params.id, function(err, foundUser){
+    User.findById(req.params.id).populate('favorite').exec(function(err, foundUser){
         if(err){
             req.flash('error', 'User not found');
             return res.redirect('/');

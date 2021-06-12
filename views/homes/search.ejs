@@ -2,7 +2,12 @@
 
 <div class="container-m">
 	<div class="row justify-content-left">
-        <h1>Your result of <%= word %></h1>
+        <h1 class="col-9">Your result of <%= word %></h1>
+		<select name="sort" class="col-2 sort">
+			<option value="name">sort by name</option>
+			<option value="date">sort by date</option>
+			<option value="rate">sort by rating</option>
+		</select>
 	  <% movie.forEach(function(movie){ %>
 		  <a href="/movies/<%= movie._id %>" class="card movie_card">
 			<img src="<%= movie.img %>" class="card-img-top" alt="...">

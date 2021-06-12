@@ -4,6 +4,8 @@ var express     = require('express'),
     middleware  = require('../middleware'),
     Theater     = require('../models/theater'),
     Showtime    = require('../models/showtime'),
+    Seat        = require('../models/seat'),
+    User        = require('../models/user'),
     path        = require('path'),
     router      = express.Router({mergeParams: true});
     
@@ -14,7 +16,7 @@ var express     = require('express'),
     today = yyyy + '-' + mm + '-' + dd;
 
 router.get('/', function(req, res){
-    Cinema.find({}, function(err, allCinema){
+    Cinema.find({}).sort({name: 1}).exec(function(err, allCinema){
         if(err){
             console.log(err);
         } else{
@@ -23,8 +25,47 @@ router.get('/', function(req, res){
     });
 });
 
+router.get('/theater/:theater_id/:showtime_id', middleware.isLoggedIn, function(req, res){
+    Theater.findById(req.params.theater_id, function(err, foundTheater){
+        if(err){
+            console.log(err);
+        } else {
+            Showtime.findById(req.params.showtime_id).populate([{path: 'movie'}, {path: 'seat'}]).exec(function(err, foundShowtime){
+                if(err){
+                    console.log(err);
+                } else {
+                    console.log(foundTheater);
+                    console.log(foundShowtime);
+                    res.render('theaters/theater.ejs',{theater: foundTheater, showtime: foundShowtime});
+                    }
+                });
+            }
+    });
+});
+
+router.post('/theater/:theater_id/:showtime_id/seat', middleware.isLoggedIn, function(req, res){
+    Seat.findById(req.body.seat, function(err, foundSeat){
+        if(err){
+            console.log(err);
+        } else {
+            User.findById(req.user, function(err, foundUser){
+                if(err){
+                    console.log(err);
+                } else {
+                    foundSeat.customer.push(foundUser);
+                    foundSeat.available = false; 
+                    foundSeat.save();
+                    res.redirect('/cinemas');
+                }
+                
+            });
+        }
+        
+    });
+});
+
 router.get('/:id', middleware.isLoggedIn, function(req, res){
-    Cinema.findById(req.params.id).populate([{path: "movies"}, {path: "theaters", populate: {path: "showtime", populate: "movie"}}]).exec(function(err, foundCinema){
+    Cinema.findById(req.params.id).populate([{path: "movies"}, {path: "theaters", options: {sort: {'name': 1}}, populate: {path: "showtime", populate: "movie"}}]).exec(function(err, foundCinema){
         if(err){
             console.log(err);
         } else {
@@ -75,6 +116,23 @@ router.post('/:id/createshowtime', middleware.isLoggedIn, function(req, res){
                 if(err){
                     console.log(err);
                 } else {
+                    createSeat = []
+                    for(i=1; i<= foundTheater.numofseat; i++){
+                        createSeat.push({seatnum: i});
+                    }
+                    Seat.insertMany(createSeat, function(err, seatCraeted){
+                        if(err){
+                            console.log(err);
+                        } else {
+                            Showtime.findByIdAndUpdate({"_id": newlyCreated._id}, {$push: {seat: seatCraeted}}).exec(function(err, pushSeat){
+                                if(err){
+                                    console.log(err);
+                                } else {
+                                    console.log(pushSeat);
+                                }
+                            });
+                        }
+                    });
                 foundTheater.showtime.push(newlyCreated._id);
                 foundTheater.save()
                 res.redirect('/cinemas/' + req.params.id);
@@ -123,6 +181,32 @@ router.post('/:id/:theaters_id', function(req, res){
                 });
                 res.redirect('/cinemas/' + req.params.id);
             }                            
+    });
+});
+
+
+router.post('/:id/:theaters_id/showtime/:showtime_id', function(req, res){
+    Cinema.findById(req.params.id, function(err, foundCinema){
+        Theater.findById(req.params.theaters_id, function(err, foundTheater){
+            if(err){
+                console.log(err);
+            } else {
+                    Showtime.findByIdAndRemove(req.params.showtime_id, function(err, removeShowtime){
+                        if(err){
+                            console.log(err);
+                        }else{
+                            foundTheater.showtime.forEach(function(showtime){
+                                if(showtime.equals(req.params.showtime_id)){
+                                    const  index = foundTheater.showtime.indexOf(req.params.showtime_id);
+                                    foundTheater.showtime.splice(index, 1);
+                                    foundTheater.save();      
+                                }
+                            });
+                        }
+                    });
+                    res.redirect('/cinemas/' + req.params.id);
+                }                            
+        });
     });
 });
 
