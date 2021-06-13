@@ -7,11 +7,11 @@
             
             <% theater.showtime.forEach(function(showtime){ %>
         <div class="row show"> 
-            <a href="/cinemas/theater/<%= theater._id %>/<%= showtime._id %>">
-                <img src="<%= showtime.movie.img %>" width="100px" class="card img">
-                <h5><%= showtime.movie.name %></h5>
-                <p><i class="far fa-calendar"></i> <%= showtime.date %></p>
-                <p><i class="far fa-clock"></i> <%= showtime.time %></p>
+            <a href="/cinemas/<%= cinema._id %>/theater/<%= theater._id %>/<%= showtime._id %>" class="card movie_card">
+                <img src="<%= showtime.movie.img %>"class="card-img-top">
+                <h5 class="movie_info text-dark"><%= showtime.movie.name %></h5>
+                <p class="movie_info text-dark"><i class="far fa-calendar"></i> <%= showtime.date %></p>
+                <p class="movie_info text-dark><i class="far fa-clock"></i> <%= showtime.time %></p>
             </a>
         </div>
             <% }); %>

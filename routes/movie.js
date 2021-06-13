@@ -29,7 +29,7 @@ var express     = require('express'),
     today = yyyy + '-' + mm + '-' + dd;
     
 router.get('/', function(req, res){
-    Movie.find({date:{$lte:today}}).sort({date:1}).exec(function(err, allMovie){
+    Movie.find({date:{$lte:today}}).populate("comments").sort({date:1}).exec(function(err, allMovie){
         if(err){
             console.log(err);
         } else{
@@ -48,26 +48,14 @@ router.delete('/:movie_id/:comment_id', function(req, res){
     Comment.findOneAndRemove(req.params.comment_id, function(err){
     if(err){
         console.log(err);
+        res.redirect('/movies/'+req.params.movie_id);
+        req.flash('error', err.message);
     } else {
+        req.flash('success', 'Delete successfully');
         res.redirect('/movies/'+req.params.movie_id);
     }
     })
 })
-
-router.post('/', function(req, res){
-    var img = req.body.img;
-    var title = req.body.title;
-    var year = req.body.year;
-    var rate = req.body.rate;
-    var newAvailable = {img: img, title: title, year: year, rate: rate};
-    Available.create(newAvailable, function(err, newlyCreated){
-        if(err){
-            console.log(err);
-        } else {
-            res.redirect('/');
-        }
-    });
-});
 
 router.get('/:id', function(req, res){
     Movie.findById(req.params.id).populate('comments').exec(function(err, foundMovie){
@@ -87,6 +75,8 @@ router.post('/:id', middleware.isLoggedIn, function(req, res){
             Comment.create(req.body.comment, function(err, comment){
                 if(err){
                     console.log(err);
+                    res.redirect('/movies/' + foundMovie._id);
+                    req.flash('error', err.message);
                 } else {
                     console.log(req.body.comment)
                     comment.author.id == req.user._id;
@@ -94,6 +84,7 @@ router.post('/:id', middleware.isLoggedIn, function(req, res){
                     comment.save();
                     foundMovie.comments.push(comment);
                     foundMovie.save();
+                    req.flash('success', 'Add comment successfully');
                     res.redirect('/movies/' + foundMovie._id);
                 }
             });
@@ -105,9 +96,12 @@ router.post('/:movie_id/fav', middleware.isLoggedIn, function(req, res){
     User.findById(req.user, function(err, foundUser){
         if(err){
             console.log(err);
+            res.redirect('back');
+            req.flash('error', err.message);
         } else {
             foundUser.favorite.push(req.params.movie_id);
             foundUser.save();
+            req.flash('success', 'Add to favorite successfully');
             res.redirect('back');
         }
     });
@@ -117,6 +111,8 @@ router.post('/:movie_id/unfav', middleware.isLoggedIn, function(req, res){
     User.findById(req.user, function(err, foundUser){
         if(err){
             console.log(err);
+            res.redirect('back');
+            req.flash('error', err.message);
         } else {
             foundUser.favorite.forEach(function(favorite){
                 if(favorite.equals(req.params.movie_id)){
@@ -125,6 +121,7 @@ router.post('/:movie_id/unfav', middleware.isLoggedIn, function(req, res){
                     foundUser.save();
                 }
             });
+            req.flash('success', 'Remove from favorite successfully');
             res.redirect('back');
         }
     });
@@ -137,7 +134,9 @@ router.put('/:id', upload.single('img'), function(req, res){
     Movie.findByIdAndUpdate(req.params.id, req.body.movie, function(err, updatedMovie){
         if(err){
             res.redirect('/admin/:id/edit');
+            req.flash('error', err.message);
         } else {
+            req.flash('success', 'Edit successfully');
             res.redirect('/movies/' + req.params.id);
         }
     });

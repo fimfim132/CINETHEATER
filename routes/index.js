@@ -3,6 +3,7 @@ var express     = require('express'),
     Slide       = require('../models/slide'),
     User        = require('../models/user'),
     Movie       = require('../models/movie'),
+    History     = require('../models/history'),
     middleware  = require('../middleware'),
     passport    = require('passport'),
     multer      = require('multer'),
@@ -34,7 +35,7 @@ router.get('/', function(req, res){
         if(err){
             console.log(err);
         } else{
-            Movie.find({date:{$lte:today}}).sort({date:1}).exec(function(err, allMovie){
+            Movie.find({date:{$lte:today}}).populate("comments").sort({date:1}).exec(function(err, allMovie){
                 if(err){
                     console.log(err);
                 } else{
@@ -47,8 +48,7 @@ router.get('/', function(req, res){
 // gteใช้กับเข้าฉายแล้วมltยังไม่เข้าฉาย
 
 router.post('/', function(req, res){
-    const word = req.body.search;
-    Movie.find({$or:[{name: {$regex: word, $options: 'i'}}, {type: {$regex: word, $options: 'i'}}]}).sort({date:1}).exec(function(err, foundMovie){
+    Movie.find({$or:[{name: {$regex: word, $options: 'i'}}, {type: {$regex: word, $options: 'i'}}]}).populate("comments").sort({date:1}).exec(function(err, foundMovie){
         if(err){
             req.flash('error', err.message);
             console.log(err);
@@ -103,19 +103,33 @@ router.get('/logout', function(req, res){
     res.redirect('/');
 });
 
-router.get('/user/:id', function(req,res){
+router.get('/user/:id', middleware.isLoggedIn, function(req,res){
+    req.session.fromUrl = req.originalUrl;
     User.findById(req.params.id).populate('favorite').exec(function(err, foundUser){
         if(err){
             req.flash('error', 'User not found');
             return res.redirect('/');
         } else {
-            res.render('user/show.ejs', {user: foundUser});
+            History.find({name: {$eq: foundUser.username}}, function(err, foundHistory){
+                if(err){
+                    console.log(err);
+                } else{
+                    User.find({}, function(err, User){
+                        if(err){
+                            console.log(err);
+                        } else {
+                            res.render('user/show.ejs', {user: foundUser, history: foundHistory, alluse: User});
+                        }
+                    })
+                }
+            })
         }
     });
 });
 
 router.get('/user/:id/edit', middleware.isLoggedIn, function(req,res){
     User.findById(req.params.id, function(err, foundUser){
+        req.session.fromUrl = req.originalUrl;
         if(err){
             req.flash('error', 'Information');
             return res.redirect('/');
@@ -125,14 +139,16 @@ router.get('/user/:id/edit', middleware.isLoggedIn, function(req,res){
     });
 });
 
-router.put('/user/:id', middleware.isLoggedIn, upload.single('img'), function(req, res){
+router.put('/user/:id', middleware.isLoggedIn, upload.single('profileImage'), function(req, res){
     if(req.file){
-        req.body.user.profileImage = '/upload' + req.file.file.name;
+        req.body.user.profileImage = '/uploads/' + req.file.filename;
     }
     User.findByIdAndUpdate(req.params.id, req.body.user, function(err, updatedMovie){
         if(err){
             res.redirect('/user/' + req.params.id);
+            req.flash('error', err.message);
         } else {
+            req.flash('success', 'Edit successfully');
             res.redirect('/user/' + req.params.id);
         }
     });

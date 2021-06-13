@@ -25,69 +25,25 @@
           <img src="<%= movie.img %>" class="card-img-top text-dark" alt="...">
           <div class="card-body">
             <h5 class="card-title text-dark"><%= movie.name %></h5>
+            <div class="d-flex justify-content-between">
               <span class="movie_info text-dark"><%= movie.date %></span>
+              <% var rate = 0 %> 
+              <% if(movie.comments ==''){} else{ %>
+                 <% movie.comments.forEach(function(rates){ %>
+              <% rate = rates.rate + rate %> 
+				<% }); %>
+        <% rate = rate/(movie.comments.length); %>
+              <% } %>
+         
+				<div>
+				<span class="movie_info text-dark"></span><i class="fas fa-star"></i><%= rate.toFixed(2) %></span>
+			</div>
+            </div>
           </div>
         </a>
         <% }); %>
   </div>
 </div>
-
-<!-- <div class="row justify-content-center">
-  <h1 class="movie_head">Recommend</h1>
-      <div class="card movie_card">
-        <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSMoliPRgy5xgoyg_eZmuKyptS9s1weVooX5tLqTBnGBYMRtE-t" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Iron Man</h5>
-            <span class="movie_info">2008</span>
-            <span class="movie_info float-right"><i class="fas fa-star"></i> 7.9 / 10</span>
-        </div>
-      </div>
-
-      <div class="card movie_card">
-        <img src="http://www.movienewsletters.net/photos/065116R1.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Iron Man 2</h5>
-            <span class="movie_info">2010</span>
-            <span class="movie_info float-right"><i class="fas fa-star"></i> 7 / 10</span>
-        </div>
-      </div>
-
-      <div class="card movie_card">
-        <img src="http://www.movienewsletters.net/photos/156876R1.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Iron Man 3</h5>
-            <span class="movie_info">2013</span>
-            <span class="movie_info float-right"><i class="fas fa-star"></i> 7.1 / 10</span>
-        </div>
-      </div>
-
-      <div class="card movie_card " >
-        <img src="https://m.media-amazon.com/images/M/MV5BMTYzOTc2NzU3N15BMl5BanBnXkFtZTcwNjY3MDE3NQ@@._V1_.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Captain America: The First Avenger</h5>
-            <span class="movie_info">2011</span>
-            <span class="movie_info float-right"><i class="fas fa-star"></i> 6.9 / 10</span>
-        </div>
-      </div>
-
-      <div class="card movie_card">
-        <img src="https://www.037hdmovie.com/wp-content/uploads/2018/04/2SfZP8iczhLaZM3OmXz.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Captain America: The Winter Soldier</h5>
-            <span class="movie_info">2014</span>
-            <span class="movie_info float-right"><i class="fas fa-star"></i> 7.7 / 10</span>
-        </div>
-      </div>
-
-      <div class="card movie_card">
-        <img src="https://contentserver.com.au/assets/511728_p10989225_p_v8_ak.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Captain America: Civil War</h5>
-            <span class="movie_info">2016</span>
-            <span class="movie_info float-right"><i class="fas fa-star"></i> 7.8 / 10</span>
-        </div>
-      </div>
-  </div> -->
 
 <script>
   const slideContainer = document.querySelector('.container');

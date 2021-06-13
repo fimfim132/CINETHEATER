@@ -1,3 +1,4 @@
+const showtime = require('../models/showtime');
 
 var express     = require('express'),
     multer      = require('multer'),
@@ -34,6 +35,7 @@ router.post('/add/movie',upload.single('img'),  function(req, res){
         if(err){
             console.log(err);
         } else {
+            req.flash('success', 'Add movie successfully');
             res.redirect('/movies');
         }
     });
@@ -74,6 +76,7 @@ router.post('/add/cinema', function(req, res){
                 });
             }
             res.redirect('/cinemas');
+            req.flash('success', 'Add cinema successfully');
         }
     });
 });
@@ -95,17 +98,33 @@ router.put('/:theaters_id', function(req, res){
             console.log(err);
         } else {
             res.redirect('/cinemas');
+            req.flash('success', 'Edit successfully');
         }
     });
 });
 
-router.delete('/:id', function(req, res){
-    Movie.findByIdAndRemove(req.params.id, function(err){
+router.delete('/:movie_id', function(req, res){
+    Movie.findByIdAndRemove(req.params.movie_id, function(err){
         if(err){
             console.log(err);
             res.redirect('/movies/');
+            req.flash('error', err.message);
         } else {
             res.redirect('/movies/');
+            req.flash('success', 'Delete movie successfully');
+        }
+    });
+});
+
+router.post('/:cinema_id', function(req, res){
+    Cinema.findByIdAndRemove(req.params.cinema_id, function(err, foundCinema){
+        if(err){
+            console.log(err);
+            res.redirect('/cinemas/');
+            req.flash('error', err.message);
+        } else {
+            res.redirect('/cinemas/');
+            req.flash('success', 'Add cinema successfully');
         }
     });
 });

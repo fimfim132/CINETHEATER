@@ -1,22 +1,86 @@
 <%- include('../partials/header.ejs') %>
+<div class="container">
+    <div class="head d-flex justify-content-center">
 <% if(!currentUser){} else{ %>
-<img src="<%= user.profileImage %>" width="300px">
-<h1><%= user.firstName + '   ' + user.lastName %></h1>
-<p><a href="mailto: <%= user.email %>"> <%= user.email %> </a>
-</p>
-<% if(currentUser.username != 'admin'){ %>
-<div class="edit">
-    <a href="/user/<%= user._id %>/edit" class="btn btn-outline-primary">Edit information</a>
-    <form id="delete-form" action="/user/<%= user._id %>?_method=DELETE" method="POST">
-        <button class="btn btn-danger">Delete user</button>
-    </form> 
-</div>
-<% } %>
-<hr>
-<h1>Favorite movie</h1>
-<% user.favorite.forEach(function(favorite){ %>
-<h4><%= favorite.name %></h4>
-<% }); %>
-<% } %>
+    <div class="rounded-circle me-5 border border-5">
+<img src="<%= user.profileImage %>" width="300px" height="300px" class="rounded-circle"></div>
+    <div>
+        <h3>Firstname: <%= user.firstName %></h3>
+        <h3>Lastname: <%= user.lastName %></h3>
+        <h3>Email: <a href="mailto: <%= user.email %>"> <%= user.email %> </a></h3>
+    
+        <% if(currentUser.username != 'admin'){ %>
+        <div class="edit">
+            <a href="/user/<%= user._id %>/edit" class="btn btn-outline-primary">Edit information</a>
+            <form id="delete-form" action="/user/<%= user._id %>?_method=DELETE" method="POST">
+                <button class="btn btn-danger">Delete user</button>
+            </form> 
 
+        </div>
+        </div>
+        <% } %>
+    </div>
+<hr>
+</div>
+<% if(currentUser.username != 'admin'){ %>
+<div class="shows">
+<div class="row">
+    <div class="col-6">
+        <h1 class="favv">Favorite movie</h1>
+        <% user.favorite.forEach(function(favorite){ %>
+            <a href="/movies/<%= favorite._id %>" class="card movie_card">
+                <img src="<%= favorite.img %>" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title text-dark"><%= favorite.name %></h5>
+                    <span class="movie_info text-dark"><%= favorite.date %></span>
+                </div>
+              </a>
+        <% }); %>
+        <% } %>
+        <% } %>
+    </div>
+    <% if(currentUser.username != 'admin'){ %>
+    <div class="col-6">
+    <h1 >booking history</h1>
+    <% history.forEach(function(history){ %>
+<div class="row">
+    <div class="col-3 space">
+        <div class="l-col-right ticket-wrap" aria-label="A fake boat ticket demonstrating mixing font weights and widths">
+            <div class="ticket" aria-hidden="true">
+            <div class="ticket__header">
+                <div class="ticket__co">
+                <span class="ticket__co-name">Cinetheater</span>
+                </div>
+            </div>
+            <div class="ticket__body">
+                <p class="ticket__route"><%= history.movie %></p>
+                <p class="ticket__description">owner :<%= history.name %></p>
+                <div class="ticket__timing">
+                <p>
+                    <span class="u-upper ticket__small-label">Date</span>
+                    <span class="ticket__detail"><%= history.date %></span>
+                </p>
+                <p>
+                    <span class="u-upper ticket__small-label">Time</span>
+                    <span class="ticket__detail"><%= history.time %></span>
+                </p>
+                <p>
+                    <span class="u-upper ticket__small-label">Theater</span>
+                    <span class="ticket__detail"><%= history.theater %></span>
+                </p>
+                </div>
+                <p class="ticket__fine-print">This ticket cannot be cancle</p>
+                <p class="u-upper ticket__admit">Seat :<%= history.seat %></p>
+                <img class="ticket__barcode" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/515428/barcode.png" alt="Fake barcode" />
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <% }) %>
+    <% } %>
+    </div>
+
+</div>
+</div>
 <%- include('../partials/footer.ejs') %>

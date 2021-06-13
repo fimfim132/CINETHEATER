@@ -12,16 +12,17 @@
     
     <div class="container-comment">
         <hr>
-            <h3>Comment</h3>
+        <h3>Comment</h3>
         <% movie.comments.forEach(function(comment){ %>
-        <p class="head-com"><strong><%= comment.author.username %></strong> - <%= comment.text %></p>
-        <% }); %>
-        <form action="/movies/<%= movie._id %>/" method="POST">
-            <div class="mb-3">
-            <input type="text" class="form-control" name="comment[text]" placeholder="add comment">
-            </div>
-            <button type="submit" class="btn btn-outline-primary">Submit</button>
-        </form>
+            <div class="row">
+        <p class=" col-6 head-com"><strong><%= comment.author.username %></strong> - <%= comment.text %></p>
+        <p class="col-2 head-com">
+            <% for(i=1;i<=comment.rate;i++){ %>
+                <i class="fas fa-star"></i>
+            <% } %>
+            <% }); %>
+        </p>
+        
     </div>
     <% } else { %> 
         <div class="container-detail"> 
@@ -44,7 +45,7 @@
             <h5><i class="far fa-calendar"></i> <%= movie.date %></h5>
         </div>
     <% if(currentUser.username == 'admin'){ %>
-    <div class="edit">
+    <div class="container-detail">
         <a href="/admin/<%= movie._id %>/edit" class="btn btn-outline-primary">Edit movie</a>
         <form id="delete-form" action="/admin/<%= movie._id %>?_method=DELETE" method="POST">
             <button class="btn btn-danger">Delete movie</button>
@@ -58,14 +59,17 @@
         <% movie.comments.forEach(function(comment){ %>
             <div class="row">
         <p class=" col-6 head-com"><strong><%= comment.author.username %></strong> - <%= comment.text %></p>
-        <p class="col-2 head-come">
+        <p class="col-2 head-com">
             <% for(i=1;i<=comment.rate;i++){ %>
                 <i class="fas fa-star"></i>
             <% } %>
         </p>
-        <form action="/movies/<%= movie.id %>/<%= comment.id %>?_method=DELETE" method="POST" class="col-1 head-com">
-            <button class="fas fa-times"></button>
-        </form>
+        <% if(currentUser.username == comment.author.username){ %>
+            <form action="/movies/<%= movie.id %>/<%= comment.id %>?_method=DELETE" method="POST" class="col-1 head-com">
+                <button class="fas fa-times"></button>
+            </form>
+            <% } %>
+        
             </div>
         <% }); %>
         <div class="row">

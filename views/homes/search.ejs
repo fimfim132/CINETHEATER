@@ -3,21 +3,64 @@
 <div class="container-m">
 	<div class="row justify-content-left">
         <h1 class="col-9">Your result of <%= word %></h1>
-		<select name="sort" class="col-2 sort">
+		<select name="sort" class="col-2 sort" id='js-sort-by'>
+			<option selected>Default</option> 
 			<option value="name">sort by name</option>
 			<option value="date">sort by date</option>
 			<option value="rate">sort by rating</option>
 		</select>
+		<div class="row" id='js-list'>
 	  <% movie.forEach(function(movie){ %>
-		  <a href="/movies/<%= movie._id %>" class="card movie_card">
+		  <a href="/movies/<%= movie._id %>" class="card movie_card searchable" data-name = '<%= movie.name %>' data-date='<%= movie.date %>' data-rate='<%= rate %>'>
 			<img src="<%= movie.img %>" class="card-img-top" alt="...">
 			<div class="card-body">
 			  <h5 class="card-title text-dark"><%= movie.name %></h5>
+			  <div class="d-flex justify-content-between">
 				<span class="movie_info text-dark"><%= movie.date %></span>
+				<% var rate = 0 %> 
+				<% if(movie.comments ==''){} else{ %>
+				   <% movie.comments.forEach(function(rates){ %>
+				<% rate = rates.rate + rate %> 
+				  <% }); %>
+		  <% rate = rate/(movie.comments.length); %>
+				<% } %>
+
+				  <div>
+				  <span class="movie_info text-dark"></span><i class="fas fa-star"></i><%= rate.toFixed(2) %></span>
+			  </div>
+			  </div>
 			</div>
 		  </a>
 		  <% }); %>
+		</div>
 	</div>
   </div>
 
+  <script>
+const searchableItems    = document.querySelectorAll('.searchable');
+const sortBy             = document.querySelector('#js-sort-by');
+const listContainer      = document.querySelector('#js-list');
+
+// Callback for sorting the items
+sortBy.addEventListener('change', function(event) {
+  // Need to convert to an array, since we can't call sort on a NodeList
+  let itemsArray = Array.prototype.slice.call(searchableItems, 0);
+  // Sort the array of nodes
+  itemsArray = itemsArray.sort(function(a, b) {
+    let aVal = ('rate' == sortBy.value) ? a.dataset.rate : ('date' == sortBy.value) ? a.dataset.date : ('name' == sortBy.value) ? a.dataset.name.toLowerCase() : a.dataset.index;
+    let bVal = ('rate' == sortBy.value) ? b.dataset.rate : ('date' == sortBy.value) ? b.dataset.date : ('name' == sortBy.value) ? b.dataset.name.toLowerCase() : b.dataset.index;
+    if(sortBy.value !='rate'){
+		return aVal > bVal ? 1 : -1;	
+	} else{
+		return aVal > bVal ? -1 : 1;
+	}
+	
+  });
+  // Empty the list of items and re-add everything in the sorted order
+  listContainer.innerHTML = ''
+  itemsArray.forEach((item, index) => {
+    listContainer.append(item);
+  });
+});
+  </script>
 <%- include('../partials/footer.ejs') %>

@@ -121,6 +121,14 @@
             </table>
     </div>
 
+    <% if(currentUser.username == 'admin'){ %>
+        <div class="edit">
+            <a href="/admin/<%= cinema._id %>/edit" class="btn btn-outline-primary">Edit name of cinema</a>
+            <form id="delete-form" action="/admin/<%= cinema._id %>" method="POST">
+                <button class="btn btn-danger">Delete cinema</button>
+            </form> 
+        </div>
+        <% } %>
 
     <% } %>
 

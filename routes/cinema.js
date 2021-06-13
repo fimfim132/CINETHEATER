@@ -6,6 +6,7 @@ var express     = require('express'),
     Showtime    = require('../models/showtime'),
     Seat        = require('../models/seat'),
     User        = require('../models/user'),
+    History     = require('../models/history'),
     path        = require('path'),
     router      = express.Router({mergeParams: true});
     
@@ -25,7 +26,7 @@ router.get('/', function(req, res){
     });
 });
 
-router.get('/theater/:theater_id/:showtime_id', middleware.isLoggedIn, function(req, res){
+router.get('/:cinema_id/theater/:theater_id/:showtime_id', middleware.isLoggedIn, function(req, res){
     Theater.findById(req.params.theater_id, function(err, foundTheater){
         if(err){
             console.log(err);
@@ -34,34 +35,64 @@ router.get('/theater/:theater_id/:showtime_id', middleware.isLoggedIn, function(
                 if(err){
                     console.log(err);
                 } else {
-                    console.log(foundTheater);
-                    console.log(foundShowtime);
-                    res.render('theaters/theater.ejs',{theater: foundTheater, showtime: foundShowtime});
+                    Cinema.findById(req.params.cinema_id, function(err, foundCinema){
+                        if(err){
+                            console.log(err);
+                        } else{
+                            console.log(foundTheater);
+                            console.log(foundShowtime);
+                            res.render('theaters/theater.ejs',{theater: foundTheater, showtime: foundShowtime, cinema: foundCinema});
+                        }
+                    })
                     }
                 });
             }
     });
 });
 
-router.post('/theater/:theater_id/:showtime_id/seat', middleware.isLoggedIn, function(req, res){
-    Seat.findById(req.body.seat, function(err, foundSeat){
+router.post('/:cinema_id/theater/:theater_id/:showtime_id/seat', middleware.isLoggedIn, function(req, res){
+    Showtime.findById(req.params.showtime_id, function(err, foundShowtime){
         if(err){
             console.log(err);
-        } else {
-            User.findById(req.user, function(err, foundUser){
+        }else{
+            Seat.find({$and:[{_id: foundShowtime.seat}, {seatnum: req.body.seat}]}, function(err, foundSeats){
                 if(err){
                     console.log(err);
                 } else {
-                    foundSeat.customer.push(foundUser);
-                    foundSeat.available = false; 
-                    foundSeat.save();
-                    res.redirect('/cinemas');
+                    User.findById(req.user, function(err, foundUser){
+                        if(err){
+                            console.log(err);
+                            res.redirect('/cinemas');
+                            req.flash('error', err.message);
+                        } else {
+                            History.create({
+                                cinema: req.body.cinema,
+                                movie: req.body.movie,
+                                theater: req.body.theater,
+                                date: req.body.date,
+                                name: req.body.name,
+                                seat: req.body.seat,
+                                time: req.body.time}, function(err, newlyCreate){
+                                if(err){
+                                    console.log(err);
+                                } else {
+                                    console.log(newlyCreate);
+                                }
+                            });
+                            foundSeats.forEach(function(i) {
+                                i.customer.push(foundUser);
+                                i.available = false; 
+                                i.save();
+                            });                
+                            res.redirect('/cinemas');
+                            req.flash('success', 'Booking successfully');
+                        }
+                    }); 
                 }
                 
             });
         }
-        
-    });
+    })
 });
 
 router.get('/:id', middleware.isLoggedIn, function(req, res){
@@ -82,8 +113,8 @@ router.get('/:id', middleware.isLoggedIn, function(req, res){
     });
 });
 
-router.get('/:id/user', middleware.isLoggedIn, function(req, res){
-    Cinema.findById(req.params.id).populate([{path: "movies"}, {path: "theaters", populate: {path: "showtime", populate: "movie"}}]).exec(function(err, foundCinema){
+router.get('/:id/user', function(req, res){
+    Cinema.findById(req.params.id).populate([{path: "movies", options: {sort: {'name': 1}}}, {path: "theaters", options: {sort: {'name': 1}}, populate: {path: "showtime", populate: "movie"}}]).exec(function(err, foundCinema){
         if(err){
             console.log(err);
         } else {
@@ -97,6 +128,8 @@ router.post('/:id', middleware.isLoggedIn, function(req, res){
     Cinema.findById(req.params.id, function(err, foundCinema){
         if(err){
             console.log(err);
+            res.redirect('/cinemas/' +req.params.id);
+            req.flash('error', err.message);
         } else {
             foundCinema.movies.push(req.body.movies);
             foundCinema.save();
@@ -134,7 +167,8 @@ router.post('/:id/createshowtime', middleware.isLoggedIn, function(req, res){
                         }
                     });
                 foundTheater.showtime.push(newlyCreated._id);
-                foundTheater.save()
+                foundTheater.save();
+                req.flash('success', 'Create successfully');
                 res.redirect('/cinemas/' + req.params.id);
                 }
             });
@@ -146,6 +180,8 @@ router.delete('/:id/:movies_id', middleware.isLoggedIn, function(req, res){
     Cinema.findById(req.params.id, function(err, foundCinema){
         if(err){
             console.log(err);
+            req.flash('error', err.message);
+            res.redirect('/cinemas/' + req.params.id);
         } else {
             foundCinema.movies.forEach(function(movie){
                 if(movie.equals(req.params.movies_id)){
@@ -154,6 +190,7 @@ router.delete('/:id/:movies_id', middleware.isLoggedIn, function(req, res){
                      foundCinema.save();      
                 }
              });
+             req.flash('success', 'Delete successfully');
            res.redirect('/cinemas/' + req.params.id);
         
         }
@@ -169,6 +206,8 @@ router.post('/:id/:theaters_id', function(req, res){
                 Theater.findByIdAndRemove(req.params.theaters_id, function(err, removeTheater){
                     if(err){
                         console.log(err);
+                        req.flash('error', err.message);
+                        res.redirect('/cinemas/' + req.params.id);
                     }else{
                         foundCinema.theaters.forEach(function(theater){
                             if(theater.equals(req.params.theaters_id)){
@@ -179,6 +218,7 @@ router.post('/:id/:theaters_id', function(req, res){
                         });
                     }
                 });
+                req.flash('success', 'Delete successfully');
                 res.redirect('/cinemas/' + req.params.id);
             }                            
     });
@@ -194,6 +234,8 @@ router.post('/:id/:theaters_id/showtime/:showtime_id', function(req, res){
                     Showtime.findByIdAndRemove(req.params.showtime_id, function(err, removeShowtime){
                         if(err){
                             console.log(err);
+                            req.flash('error', err.message);
+                            res.redirect('/cinemas/' + req.params.id);
                         }else{
                             foundTheater.showtime.forEach(function(showtime){
                                 if(showtime.equals(req.params.showtime_id)){
@@ -204,6 +246,7 @@ router.post('/:id/:theaters_id/showtime/:showtime_id', function(req, res){
                             });
                         }
                     });
+                    req.flash('success', 'Remove successfully');
                     res.redirect('/cinemas/' + req.params.id);
                 }                            
         });

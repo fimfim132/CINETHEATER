@@ -8,7 +8,19 @@
 			<img src="<%= movie.img %>" class="card-img-top" alt="...">
 			<div class="card-body">
 			  <h5 class="card-title text-dark"><%= movie.name %></h5>
-				<span class="movie_info text-dark"><%= movie.date %></span>
+			  <div class="d-flex justify-content-between">
+				<span class="movie_infos text-dark"><%= movie.date %></span>
+				<% var rate = 0 %> 
+              <% if(movie.comments ==''){} else{ %>
+                 <% movie.comments.forEach(function(rates){ %>
+              <% rate = rates.rate + rate %> 
+				<% }); %>
+        <% rate = rate/(movie.comments.length); %>
+              <% } %>
+				<div>
+				<span class="movie_info text-dark"></span><i class="fas fa-star"></i><%= rate.toFixed(2) %></span>
+			</div>
+			  </div>
 			</div>
 		  </a>
 		  <% }); %>
@@ -23,7 +35,19 @@
 			<img src="<%= come.img %>" class="card-img-top" alt="...">
 			<div class="card-body">
 			  <h5 class="card-title text-dark"><%= come.name %></h5>
-				<span class="movie_info text-dark"><%= come.date %></span>
+			  <div class="d-flex justify-content-between">
+				<span class="movie_infos text-dark"><%= come.date %></span>
+				<% var rate = 0 %> 
+              <% if(come.comments ==''){} else{ %>
+                 <% come.comments.forEach(function(rates){ %>
+              <% rate = rates.rate + rate %> 
+				<% }); %>
+        <% rate = rate/(come.comments.length); %>
+              <% } %>
+				<div>
+				<span class="movie_info text-dark"></span><i class="fas fa-star"></i><%= rate.toFixed(2) %></span>
+			</div>
+			  </div>
 			</div>
 		  </a>
 		  <% }); %>

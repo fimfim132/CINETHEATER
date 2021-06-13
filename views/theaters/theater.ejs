@@ -8,18 +8,25 @@
         <div class="screen">
             <h2 class="screens">SCREEN</h2>
         </div>
-            <form action="/cinemas/theater/<%= theater._id %>/<%= showtime._id %>/seat" method="POST">
-                <div class="row">
+        <div class="text-center">
+            <form action="/cinemas/<%= cinema._id %>/theater/<%= theater._id %>/<%= showtime._id %>/seat" method="POST">
+                <div class="row justify-content-center">
+                    <input name="cinema" value="<%= cinema.name %>" class="invisible">
+                    <input name="movie" value="<%= showtime.movie.name %>" class="invisible">
+                    <input name="theater" value="<%= theater.name %>" class="invisible">
+                    <input name="date" value="<%= showtime.date %>" class="invisible">
+                    <input name="time" value="<%= showtime.time %>" class="invisible">
+                    <input name="name" value="<%= currentUser.username %>" class="invisible">
                     <% showtime.seat.forEach(function(seat){ %>
                         <% if(seat.available){%>
-                            <input name="seat" type="checkbox" value="<%= seat.id %>" id="seat" class="seat">
+                            <input name="seat" type="checkbox" value="<%= seat.seatnum %>" id="seat" class="seat">
                             <% } else { %>
-                            <input name="seat" type="checkbox" value="<%= seat.id %>" id="seat" class="seat" disabled checked>
+                            <input name="seat" type="checkbox" value="<%= seat.seatnum %>" id="seat" class="seat" disabled checked>
                             <% } %>
                     <% }); %>
                 </div>
-                        <input type="submit">
+                <input type="submit">
             </form>
-           
+        </div>   
     </div>
 <%- include('../partials/footer.ejs') %>
