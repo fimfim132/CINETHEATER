@@ -45,7 +45,7 @@ router.get('/', function(req, res){
 });
 
 router.delete('/:movie_id/:comment_id', function(req, res){
-    Comment.findOneAndRemove(req.params.comment_id, function(err){
+    Comment.findByIdAndRemove(req.params.comment_id, function(err){
     if(err){
         console.log(err);
         res.redirect('/movies/'+req.params.movie_id);

@@ -48,6 +48,7 @@ router.get('/', function(req, res){
 // gteใช้กับเข้าฉายแล้วมltยังไม่เข้าฉาย
 
 router.post('/', function(req, res){
+    const word = req.body.search;
     Movie.find({$or:[{name: {$regex: word, $options: 'i'}}, {type: {$regex: word, $options: 'i'}}]}).populate("comments").sort({date:1}).exec(function(err, foundMovie){
         if(err){
             req.flash('error', err.message);
