@@ -5,16 +5,16 @@
 <div class="top100"> 
             <h1>Theater <%= theater.name %></h1>
             
-            <% theater.showtime.forEach(function(showtime){ %>
         <div class="row show"> 
+            <% theater.showtime.forEach(function(showtime){ %>
             <a href="/cinemas/<%= cinema._id %>/theater/<%= theater._id %>/<%= showtime._id %>" class="card movie_card">
                 <img src="<%= showtime.movie.img %>"class="card-img-top">
                 <h5 class="movie_info text-dark"><%= showtime.movie.name %></h5>
                 <p class="movie_info text-dark"><i class="far fa-calendar"></i> <%= showtime.date %></p>
                 <p class="movie_info text-dark><i class="far fa-clock"></i> <%= showtime.time %></p>
             </a>
-        </div>
             <% }); %>
+        </div>
         <hr>
     <% } %>
     <% }); %>
